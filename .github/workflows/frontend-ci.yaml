@@ -57,7 +57,7 @@ jobs:
       - run: cd starter/frontend && npm ci
        
       # Run the tests.
-      - run: cd /home/runner/work/movie_picture/movie_picture/starter/frontend/src/ && npm run test
+      - run: cd starter/frontend/ && npm run test
 
 
 
