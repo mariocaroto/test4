@@ -9,7 +9,7 @@ on:
 
 env:
   REACT_APP_MOVIE_API_URL: 'http://localhost:5000'
-  NODE_VERSION: 14
+  NODE_VERSION: 16.9.0
 
 jobs:
   lint:
