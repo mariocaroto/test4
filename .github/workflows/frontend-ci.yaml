@@ -1,0 +1,82 @@
+# Workflow name
+name: Frontend CI
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+  
+    
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches:
+      - main
+      
+
+
+# Jobs defined in the workflow
+jobs:
+  build-and-test-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          #cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+
+
+     # Install the dependencies.
+      - run: cd starter/frontend && npm install && npm ci
+       
+
+      # Run the linter.
+      - run: cd starter/frontend && npx eslint --fix .
+
+      - run: npx eslint .
+
+
+  build-and-test-2:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          #cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+
+ # Install the dependencies.
+      - run: cd starter/frontend && npm ci
+       
+      # Run the tests.
+      - run: cd /home/runner/work/movie_picture/movie_picture/starter/frontend/src/ && npm run test
+
+
+
+  post-build-actions:
+    needs: [build-and-test-1, build-and-test-2]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          #cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+
+           # Install the dependencies.
+      - run: cd starter/frontend && npm ci
+       
+      # Run the tests.
+      - run: cd starter/frontend && npm run test
