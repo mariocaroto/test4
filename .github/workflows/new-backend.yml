@@ -1,0 +1,64 @@
+name: new continuous-integration-backend
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Install pipenv 
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Test pipenv
+        run: pipenv run lint
+
+  test:
+    runs-on: ubuntu-latest    
+
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Install pipenv 
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Test pipenv
+        run: pipenv run test
+
+  build:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Install pipenv 
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Change directory
+        run: cd starter/backend
+
+       - name: Build the image
+         run:  docker build --tag mp-backend:latest .
+
+       - name: Run the image
+         run: docker run -p 5000:5000 --name mp-backend -d mp-backend  
+
+
+
