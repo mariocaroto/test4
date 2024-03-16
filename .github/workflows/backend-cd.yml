@@ -1,63 +1,61 @@
-# Workflow name
-name: Frontend Continuous Integration
+name: Backend CD Workflow
 
-# Triggers for the workflow
+
 on:
-  # Manual trigger using the workflow_dispatch event
+  
   workflow_dispatch:
   
-    
-  # Automatic trigger on pull request events targeting the main branch
-  pull_request:
+  push:
     branches:
       - main
       
 env:
   NODE_VERSION: 16.9.0
 
-# Jobs defined in the workflow
+
 jobs:
+
   lint_job:
+
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up Node.js 
         uses: actions/setup-node@v3
+
         with:
           node-version: ${{ env.NODE_VERSION }}
-          #cache: 'npm'
+          cache: 'npm'
           cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
 
-
-  # Install the dependencies.
       - run: cd starter/frontend && npm ci
        
-
-  # Run the linter.
       - run: cd starter/frontend && npm run lint
 
       
 
-# Run job to test job
   test_job:
+
+
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Node.js 
         uses: actions/setup-node@v3
+        
         with:
           node-version: ${{ env.NODE_VERSION }}
-          #cache: 'npm'
+          cache: 'npm'
           cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
 
- # Install the dependencies.
+ 
       - run: cd starter/frontend && npm ci
-       
-      # Run the tests.
+            
       - run: cd starter/frontend/ && npm run test
 
 
@@ -73,13 +71,5 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          #cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
-
-           # Install the dependencies.
-      - run: cd starter/frontend && npm ci
-       
-      # Run the tests.
-      - run: cd starter/frontend && npm run test
-
-      - run: cd starter/frontend && REACT_APP_MOVIE_API_URL=http://localhost:5000 npm start
+          cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"     

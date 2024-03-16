@@ -1,4 +1,4 @@
-name: BBackend Continuous Integration
+name: Backend Continuous Integration
 
 # Triggers for the workflow
 on:
