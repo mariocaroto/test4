@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           #cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/package-lock.json"
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/Pipfile.lock"
 
 
             # Install the dependencies.
@@ -51,7 +51,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           #cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/Pipfile.lock"
 
  # Install the dependencies.
       - run: cd starter/backend && pipenv install
