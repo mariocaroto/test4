@@ -24,7 +24,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest    
-
+    steps:
       - name: Check out the code
         uses: actions/checkout@v3
 
@@ -54,11 +54,11 @@ jobs:
       - name: Change directory
         run: cd starter/backend
 
-       - name: Build the image
-         run:  docker build --tag mp-backend:latest .
+      - name: Build the image
+        run:  docker build --tag mp-backend:latest .
 
-       - name: Run the image
-         run: docker run -p 5000:5000 --name mp-backend -d mp-backend  
+      - name: Run the image
+        run: docker run -p 5000:5000 --name mp-backend -d mp-backend  
 
 
 
