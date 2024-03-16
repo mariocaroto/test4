@@ -21,14 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/Pipfile.lock"
-          cache: 'npm'
-          
-
+  
+        
 
             # Install the dependencies.
       - run: cd starter/backend && pipenv install
