@@ -1,4 +1,4 @@
-name: Backend CI Workflow
+name: BBackend Continuous Integration
 
 # Triggers for the workflow
 on:
@@ -24,9 +24,10 @@ jobs:
   
         
 
-            # Install the dependencies.
-      - run: cd starter/backend && pip install pipenv && pipenv install
+            # Install pipen
+       - run: && pip install pipenv 
        
+       - run: cd starter/backend && pipenv install
 
   # Run the linter.
       - run: cd starter/backend && pipenv run lint
@@ -41,12 +42,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          #cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend"
 
  # Install the dependencies.
       - run: cd starter/backend && pip install pipenv && pipenv install
