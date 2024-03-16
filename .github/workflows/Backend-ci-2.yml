@@ -25,7 +25,7 @@ jobs:
         
 
             # Install the dependencies.
-      - run: cd starter/backend && pipenv install
+      - run: cd starter/backend && pip install pipenv
        
 
   # Run the linter.
