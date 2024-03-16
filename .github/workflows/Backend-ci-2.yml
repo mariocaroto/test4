@@ -24,10 +24,9 @@ jobs:
   
         
 
-            # Install pipen
-       - run: && pip install pipenv 
-       
-       - run: cd starter/backend && pipenv install
+             
+       - name: Install pipenv
+         run: cd starter/backend && pipenv install
 
   # Run the linter.
       - run: cd starter/backend && pipenv run lint
