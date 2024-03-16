@@ -25,7 +25,7 @@ jobs:
         
 
             # Install the dependencies.
-      - run: cd starter/backend && pip install pipenv
+      - run: cd starter/backend && pip install pipenv && pipenv install
        
 
   # Run the linter.
@@ -49,7 +49,7 @@ jobs:
           cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend"
 
  # Install the dependencies.
-      - run: cd starter/backend && pipenv install
+      - run: cd starter/backend && pip install pipenv && pipenv install
        
       # Run the tests.
       - run: cd starter/backend/ && pipenv run test
