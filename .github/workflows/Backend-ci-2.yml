@@ -1,0 +1,60 @@
+name: Backend CI Workflow
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+  
+    
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches:
+      - main
+      
+env:
+  NODE_VERSION: '16.x'
+
+# Jobs defined in the workflow
+jobs:
+  lint_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          #cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/package-lock.json"
+
+
+            # Install the dependencies.
+      - run: cd starter/backend && pipenv install
+       
+
+  # Run the linter.
+      - run: cd starter/backend && pipenv run lint
+
+
+
+      # Run job to test job
+  test_job:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          #cache: 'npm'
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+
+ # Install the dependencies.
+      - run: cd starter/backend && pipenv install
+       
+      # Run the tests.
+      - run: cd starter/backend/ && pipenv run test
