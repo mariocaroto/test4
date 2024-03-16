@@ -20,7 +20,7 @@ jobs:
         run: cd starter/backend && pipenv install
 
       - name: Test pipenv
-        run: cd starter/backend && pipenv run lint
+        run: pipenv run lint
 
   test:
     runs-on: ubuntu-latest    
