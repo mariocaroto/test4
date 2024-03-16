@@ -1,5 +1,5 @@
 # Workflow name
-name: Frontend CI
+name: Frontend CI Workflow
 
 # Triggers for the workflow
 on:
@@ -17,7 +17,7 @@ env:
 
 # Jobs defined in the workflow
 jobs:
-  build-and-test-1:
+  lint_job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -30,17 +30,17 @@ jobs:
           cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
 
 
-     # Install the dependencies.
+  # Install the dependencies.
       - run: cd starter/frontend && npm ci
        
 
-      # Run the linter.
-      - run: cd starter/frontend && npx eslint --fix .
+  # Run the linter.
+      - run: cd starter/frontend && npm run lint
 
-      - run: npx eslint .
+      
 
-
-  build-and-test-2:
+# Run job to test job
+  test_job:
     runs-on: ubuntu-latest
     steps:
 
@@ -62,8 +62,8 @@ jobs:
 
 
 
-  post-build-actions:
-    needs: [build-and-test-1, build-and-test-2]
+  build_job:
+    needs: [lint_job, test_job]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -72,8 +72,8 @@ jobs:
       - name: Set up Node.js 
         uses: actions/setup-node@v3
         with:
-          node-version: latest
-          #cache: 'npm'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
           cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
 
            # Install the dependencies.
@@ -81,3 +81,5 @@ jobs:
        
       # Run the tests.
       - run: cd starter/frontend && npm run test
+
+      - run: REACT_APP_MOVIE_API_URL=http://localhost:5000 npm start

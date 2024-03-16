@@ -1,0 +1,17 @@
+name: Frontend CD Workflow
+
+
+on:
+  
+  workflow_dispatch:
+  
+  push:
+    branches:
+      - main
+      
+env:
+  NODE_VERSION: 16.9.0
+
+
+jobs: 
+  
