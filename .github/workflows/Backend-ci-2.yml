@@ -12,7 +12,7 @@ on:
       - main
       
 env:
-  NODE_VERSION: '16.x'
+  NODE_VERSION: '16.9.0'
 
 # Jobs defined in the workflow
 jobs:
@@ -25,8 +25,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend/Pipfile.lock"
           cache: 'npm'
-          #cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/backend"
+          
 
 
             # Install the dependencies.
