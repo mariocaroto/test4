@@ -32,13 +32,13 @@ jobs:
         run: pip install pipenv
 
       - name: Install dependencies
-        run: cd  /home/runner/work/test4/test4/starter/backend/ && pipenv install --dev
+        run: cd  /home/runner/work/test4/test4/starter/backend/ && pipenv install
 
       - name: Test pipenv
         run: cd starter/backend && pipenv run test
 
   build:
-    needs: [test]
+    needs: [lint, test]
     runs-on: ubuntu-latest
 
     steps:
