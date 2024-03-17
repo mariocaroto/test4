@@ -42,7 +42,9 @@ jobs:
 
 
  # Install the dependencies.
-      - run: cd starter/backend && pip install pipenv && pipenv install --dev
+      - run: cd starter/backend && pip install pipenv 
+      
+      - run: pipenv install --dev
        
       # Run the tests.
       - run: cd starter/backend/ && pipenv run test
