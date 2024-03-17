@@ -17,10 +17,10 @@ jobs:
         run: pip install pipenv
 
       - name: Install dependencies
-        run: cd starter/backend && pipenv install
+        run: cd starter/backend && pipenv install --dev
 
       - name: Test pipenv
-        run: cd starter/backend && pipenv run lint
+        run: cd  /home/runner/work/test4/test4/starter/backend/ && pipenv run lint
 
   test:
     runs-on: ubuntu-latest    
