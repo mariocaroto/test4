@@ -51,9 +51,6 @@ jobs:
       - name: Install dependencies
         run: cd starter/backend && pipenv install
 
-      #- name: Change directory
-       # run: cd starter/backend
-
       - name: Build the image
         run:  cd starter/backend && docker build --tag mp-backend:latest .
 

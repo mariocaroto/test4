@@ -11,6 +11,8 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - frontend   
       
 env:
   NODE_VERSION: 16.9.0
