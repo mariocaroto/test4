@@ -1,75 +1,91 @@
-name: Backend CD Workflow
-
-
+nname: Backend continuous-deplpyment
 on:
-  
   workflow_dispatch:
-  
-  push:
+  pull_request:
     branches:
       - main
-      
-env:
-  NODE_VERSION: 16.9.0
-
-
+  
 jobs:
-
-  lint_job:
-
-
+  lint:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Check out the code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
+      - name: Install pipenv 
+        run: pip install pipenv
 
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install --dev
 
-      - run: cd starter/frontend && npm ci
-       
-      - run: cd starter/frontend && npm run lint
+      - name: Test pipenv
+        run: cd  /home/runner/work/test4/test4/starter/backend/ && pipenv run lint
 
-      
-
-  test_job:
-
-
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest    
     steps:
-      - name: Checkout code
+      - name: Check out the code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
-        
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"
+      - name: Install pipenv 
+        run: pip install pipenv
 
- 
-      - run: cd starter/frontend && npm ci
-            
-      - run: cd starter/frontend/ && npm run test
+      - name: Install dependencies
+        run: cd  /home/runner/work/test4/test4/starter/backend/ && pipenv install
 
+      - name: Test pipenv
+        run: cd starter/backend && pipenv run test
 
-
-  build_job:
-    needs: [lint_job, test_job]
+  build:
+    needs: [lint, test]
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Check out the code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
+      - name: Install pipenv 
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install
+
+        - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: "/home/runner/work/movie_picture/movie_picture/startet/frontend/package-lock.json"     
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+          aws-region: us-east-1
+  
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+  
+      - name: Build and push image to ECR
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: backend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+  
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name cluster
+  
+      - name: Set image tag to newer version
+        run: kustomize edit set image $REPOSITORY=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: backend
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: starter/backend/k8s
+  
+      - name: Apply the manifests to the cluster
+        run: kustomize build | kubectl apply -f -
+        working-directory: starter/backend/k8s
+
+
+
